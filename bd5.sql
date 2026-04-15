@@ -1,0 +1,192 @@
+-- create table roles
+-- (
+-- id serial primary key,
+-- title VARCHAR UNIQUE not null
+-- );
+
+-- insert into roles (title) values
+-- 	('Администратор'),
+-- 	('Регистратор волонтеров'),
+-- 	('Регистратор преподавателей'),
+-- 	('Регистратор участников'),
+-- 	('Регистратор мастер-классов'),
+-- 	('Пользователь');
+
+
+-- create table menu
+-- (
+-- id serial primary key,
+-- title VARCHAR UNIQUE not null
+-- );
+
+-- insert into menu (title) values
+-- 	('Содержание'),
+-- 	('О Программе'),
+-- 	('Места работы'),
+-- 	('Должности'),
+-- 	('Ученые степени'),
+-- 	('Ученые звания'),
+-- 	('Преподаватели'),
+-- 	('Группы'),
+-- 	('Специальности'),
+-- 	('Факультеты'),
+-- 	('Призы'),
+-- 	('Города'),
+-- 	('Уч. Заведения'),
+-- 	('Мастер классы'),
+-- 	('Участники'),
+-- 	('Волонтеры'),
+-- 	('Места работы преподавателя'),
+-- 	('Должности преподавателя'),
+-- 	('Ученые степени преподавателя'),
+-- 	('Ученые звания преподавателя'),
+-- 	('Преподаватели на мастер классах'),
+-- 	('Волонтеры на мастер классах'),
+-- 	('Призы участника'),
+-- 	('Приоритеты мастер классов'),
+-- 	('Экспорт данных'),
+-- 	('Настройка'),
+-- 	('Смена пароля'),
+-- 	('Админ-зона');
+
+
+-- create table users
+-- (
+-- id serial primary key,
+-- login VARCHAR UNIQUE not null,
+-- pass VARCHAR not null,
+-- id_role integer,
+-- foreign key(id_role) references roles(id) 
+-- on delete set null
+-- );
+
+-- create table accesses
+-- (
+-- id serial primary key,
+-- r bool, --чтение
+-- e bool, --изменение
+-- w bool, --добавление
+-- d bool, --удаление
+-- id_menu integer,
+-- id_role integer,
+-- foreign key (id_menu) references menu (id) on delete cascade,
+-- foreign key (id_role) references roles (id) on delete cascade
+-- );
+
+
+-- -- Администратор - полные права на все пункты меню
+-- INSERT INTO accesses (r, e, w, d, id_menu, id_role) VALUES
+-- (true, true, true, true, 1, 1),  -- Содержание
+-- (true, true, true, true, 2, 1),  -- О Программе
+-- (true, true, true, true, 3, 1),  -- Места работы
+-- (true, true, true, true, 4, 1),  -- Должности
+-- (true, true, true, true, 5, 1),  -- Ученые степени
+-- (true, true, true, true, 6, 1),  -- Ученые звания
+-- (true, true, true, true, 7, 1),  -- Преподаватели
+-- (true, true, true, true, 8, 1),  -- Группы
+-- (true, true, true, true, 9, 1),  -- Специальности
+-- (true, true, true, true, 10, 1), -- Факультеты
+-- (true, true, true, true, 11, 1), -- Призы
+-- (true, true, true, true, 12, 1), -- Города
+-- (true, true, true, true, 13, 1), -- Уч. Заведения
+-- (true, true, true, true, 14, 1), -- Мастер классы
+-- (true, true, true, true, 15, 1), -- Участники
+-- (true, true, true, true, 16, 1), -- Волонтеры
+-- (true, true, true, true, 17, 1), -- Места работы преподавателя
+-- (true, true, true, true, 18, 1), -- Должности преподавателя
+-- (true, true, true, true, 19, 1), -- Ученые степени преподавателя
+-- (true, true, true, true, 20, 1), -- Ученые звания преподавателя
+-- (true, true, true, true, 21, 1), -- Преподаватели на мастер классах
+-- (true, true, true, true, 22, 1), -- Волонтеры на мастер классах
+-- (true, true, true, true, 23, 1), -- Призы участника
+-- (true, true, true, true, 24, 1), -- Приоритеты мастер классов
+-- (true, true, true, true, 25, 1), -- Экспорт данных
+-- (true, true, true, true, 26, 1), -- Настройка
+-- (true, true, true, true, 27, 1), -- Смена пароля
+-- (true, true, true, true, 28, 1); -- Админ-зона
+
+-- -- Регистратор волонтеров - права на волонтеров и связанные данные
+-- INSERT INTO accesses (r, e, w, d, id_menu, id_role) VALUES
+-- (true, false, false, false, 1, 2),   -- Содержание (только чтение)
+-- (true, false, false, false, 2, 2),   -- О Программе (только чтение)
+-- (true, true, true, true, 16, 2),     -- Волонтеры (полные права)
+-- (true, true, true, true, 22, 2),     -- Волонтеры на мастер классах (полные права)
+-- (true, false, false, false, 25, 2),  -- Экспорт данных (только чтение)
+-- (true, false, false, false, 27, 2),  -- Смена пароля (только чтение)
+-- (true, false, false, false, 26, 2),  -- Настройка
+
+-- (true, true, true, true, 8, 2),  -- Группы
+-- (true, true, true, true, 9, 2),  -- Специальности
+-- (true, true, true, true, 10, 2); -- Факультеты
+
+-- -- Регистратор преподавателей - права на преподавателей и связанные данные
+-- INSERT INTO accesses (r, e, w, d, id_menu, id_role) VALUES
+-- (true, false, false, false, 1, 3),   -- Содержание (только чтение)
+-- (true, false, false, false, 2, 3),   -- О Программе (только чтение)
+-- (true, true, true, true, 3, 3),      -- Места работы (полные права)
+-- (true, true, true, true, 4, 3),      -- Должности (полные права)
+-- (true, true, true, true, 5, 3),      -- Ученые степени (полные права)
+-- (true, true, true, true, 6, 3),      -- Ученые звания (полные права)
+-- (true, true, true, true, 7, 3),      -- Преподаватели (полные права)
+-- (true, true, true, true, 17, 3),     -- Места работы преподавателя (полные права)
+-- (true, true, true, true, 18, 3),     -- Должности преподавателя (полные права)
+-- (true, true, true, true, 19, 3),     -- Ученые степени преподавателя (полные права)
+-- (true, true, true, true, 20, 3),     -- Ученые звания преподавателя (полные права)
+-- (true, true, true, true, 21, 3),     -- Преподаватели на мастер классах (полные права)
+-- (true, false, false, false, 25, 3),  -- Экспорт данных (только чтение)
+-- (true, false, false, false, 27, 3),   -- Смена пароля (только чтение)
+-- (true, false, false, false, 26, 3); -- Настройка
+
+-- -- Регистратор участников - права на участников и призы
+-- INSERT INTO accesses (r, e, w, d, id_menu, id_role) VALUES
+-- (true, false, false, false, 1, 4),   -- Содержание (только чтение)
+-- (true, false, false, false, 2, 4),   -- О Программе (только чтение)
+-- (true, true, true, true, 11, 4),     -- Призы (полные права)
+-- (true, true, true, true, 12, 4),     -- Города
+-- (true, true, true, true, 13, 4),     -- Уч. Заведения
+-- (true, true, true, true, 15, 4),     -- Участники (полные права)
+-- (true, true, true, true, 24, 4),     -- Приоритеты мастер классов (полные права)
+-- (true, true, true, true, 23, 4),     -- Призы участника (полные права)
+-- (true, false, false, false, 25, 4),  -- Экспорт данных (только чтение)
+-- (true, false, false, false, 27, 4),   -- Смена пароля (только чтение)
+-- (true, false, false, false, 26, 4);  -- Настройка
+
+-- -- Регистратор мастер-классов - права на мастер-классы
+-- INSERT INTO accesses (r, e, w, d, id_menu, id_role) VALUES
+-- (true, false, false, false, 1, 5),   -- Содержание (только чтение)
+-- (true, false, false, false, 2, 5),   -- О Программе (только чтение)
+-- (true, true, true, true, 14, 5),     -- Мастер классы (полные права)
+-- (true, false, false, false, 25, 5),  -- Экспорт данных (только чтение)
+-- (true, false, false, false, 27, 5),  -- Смена пароля (только чтение)
+-- (true, false, false, false, 26, 5);  -- Настройка
+
+
+-- -- Пользователь - базовые права
+--INSERT INTO accesses (r, e, w, d, id_menu, id_role) VALUES
+--(true, false, false, false, 23, 6), -- Призы участника
+--(true, false, false, false, 7, 6);      -- Преподаватели (полные права)
+--(true, false, false, false, 14, 6),     -- Мастер классы (полные права)
+--(true, false, false, false, 26, 6);  -- Настройка
+-- (true, false, false, false, 1, 6),   -- Содержание
+-- (true, false, false, false, 2, 6),   -- О Программе
+ --(true, false, false, false, 25, 6);  -- Смена пароля
+-- select * from roles;
+-- select * from accesses;
+-- select * from volunteers_master_classes;
+-- --select * from study_;
+-- SELECT * FROM study_groups;
+-- CREATE TABLE IF NOT EXISTS participants_master_classes
+-- (
+-- 	id SERIAL PRIMARY KEY,
+-- 	id_participant INTEGER,
+-- 	id_master_class INTEGER,
+-- 	FOREIGN KEY (id_participant) REFERENCES participants (id),
+-- 	FOREIGN KEY (id_master_class) REFERENCES master_classes (id)
+
+-- );
+--select * from participants;
+--select * from accesses;
+--select * from menu;
+--ALTER TABLE menu ADD COLUMN table_name VARCHAR(100) DEFAULT NULL;
+--select * from roles;
+--SELECT (id_menu, r, e, w, d) FROM accesses WHERE id_role = 6;
